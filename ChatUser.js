@@ -112,18 +112,30 @@ class ChatUser {
      */
 
     privateMessage( username, message) {
-        const users = this.room.members.values();
-        const recipient = users.find(user => user.name === username);
-        console.log("USERS:", users)
-        if(!recipient){
-            throw new Error(`could not find: ${username}`);
+        // const users = this.room.members.values();
+        // const recipient = users.find(user => user.name === username);
+        // console.log("USERS:", users)
+        // if(!recipient){
+        for (const user of this.room.members){
+         if (user.name === username){
+            user.send(JSON.stringify({
+                type: "chat",
+                text: message,
+                name: this.name
+            }));
+
+            return;
         }
 
-        recipient.send(JSON.stringify({
-            type: "chat",
-            message: message,
-            name: this.name
-        }));
+       this.send(JSON.stringify(
+            {
+                type: "note",
+                text: `Could not find user ${username}`
+            }
+        )
+       )
+
+    }
 
     }
 
