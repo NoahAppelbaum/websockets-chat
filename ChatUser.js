@@ -81,7 +81,8 @@ class ChatUser {
         if (msg.type === "join") this.handleJoin(msg.name);
         else if (msg.text.startsWith("/priv")){
             const parts = msg.text.split(" ");
-            this.privateMessage(parts[1], parts[2]);
+            const message = parts.slice(2).join(" ");
+            this.privateMessage(parts[1], message);
         }
         else if (msg.text === "/joke") {
             this.sendJoke();
@@ -125,17 +126,14 @@ class ChatUser {
             }));
 
             return;
+         }
         }
-
-       this.send(JSON.stringify(
-            {
+        this.send(JSON.stringify({
                 type: "note",
                 text: `Could not find user ${username}`
-            }
+            })
         )
-       )
 
-    }
 
     }
 
